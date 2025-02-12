@@ -265,6 +265,9 @@ func coverage(profile *cover.Profile, f extent, blocks, annotations []extent) (i
 
 		if b.Count > 0 {
 			covered += int64(b.NumStmt)
+		} else {
+			notCovered := fmt.Sprintf("%40s:%d.%d-%d.%d", profile.FileName, b.StartLine, b.StartCol, b.EndLine, b.EndCol)
+			fmt.Println("Not covered: %s\n", notCovered)
 		}
 	}
 
