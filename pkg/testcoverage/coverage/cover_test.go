@@ -219,6 +219,32 @@ func Test_coverageForFile(t *testing.T) {
 	assert.Equal(t, Stats{Total: 7, Covered: 0}, s)
 }
 
+func Test_coverage_NotCovered(t *testing.T) {
+	t.Parallel()
+
+	// pipe to capture stdout
+	r, w, err := os.Pipe()
+	assert.NoError(t, err)
+
+	stdout := os.Stdout
+	defer func() { os.Stdout = stdout }()
+
+	os.Stdout = w
+
+	funcs := []Extent{
+		{StartLine: 1, EndLine: 10},
+	}
+
+	profile := &cover.Profile{Blocks: []cover.ProfileBlock{
+		{StartLine: 1, EndLine: 2, NumStmt: 1, Count: 0},
+	}}
+
+	CoverageForFile(profile, funcs, nil, nil)
+
+	w.Close()
+	os.Stdout = stdout
+}
+
 func pluckStartLine(extents []Extent) []int {
 	res := make([]int, len(extents))
 	for i, e := range extents {
