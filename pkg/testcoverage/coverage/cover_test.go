@@ -3,6 +3,7 @@ package coverage_test
 import (
 	"strings"
 	"testing"
+	"os"
 
 	"github.com/stretchr/testify/assert"
 	"golang.org/x/tools/cover"
@@ -220,10 +221,9 @@ func Test_coverageForFile(t *testing.T) {
 }
 
 func Test_coverage_NotCovered(t *testing.T) {
-	t.Parallel()
 
 	// pipe to capture stdout
-	r, w, err := os.Pipe()
+	_, w, err := os.Pipe()
 	assert.NoError(t, err)
 
 	stdout := os.Stdout
